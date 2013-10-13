@@ -1,0 +1,27 @@
+#=============================================#
+|                    REQUIS                   |
++---------------------------------------------+
+|   - 3 activités                             |
+|   - 1 StartActivityForResult                |
+|   - 1 Liste (+Ajout +Suppression)           |
+|   - 1 BaseAdapter                          |
+|   - Ressources XML (Strings, colors)        |
+|   - Requête HTTP                            |
+|   - Notifications                           |
+|                                             |
+#=============================================#
+aboudard@oxiane.com
+
+
+Appli d'organisation de tâches
+  - Activités : splash, connexion, liste des tâches (clic court : aff + modf, clic long : suppr si droits), affichage d'une tâche + modif
+  - Admin sur serveur / membre sur client (auth)
+  - Données stockées en XML sur serveur et SQLite sur client
+  - Tâches avec priorité, auteur, contenu, validation (todo, done, deferred), date, attribution
+  - Membres avec nb tâches attribuées, nb tâches effectuées
+  
+Partie avancée
+  - Notifications lors de réception de news
+  - Statistiques (tps/tâches, tâches/mbr, tps/mbr/tâches)
+  - Commentaires sur les tâches
+  - Login sécurisés (SHA-2)
