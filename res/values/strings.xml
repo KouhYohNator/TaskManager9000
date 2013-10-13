@@ -7,5 +7,12 @@
     <string name="splash_logo">logo</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="txt_connection">Informations de connexion</string>
+    <string name="txt_Login">Identifiant</string>
+    <string name="txt_password">MdP</string>
+    <string name="btn_connect">Connexion</string>
+    <string name="divider_description">divider</string>
+    <string name="txt_servAddr">Adresse</string>
+    <string name="txt_sertPort">Port</string>
 
 </resources>
