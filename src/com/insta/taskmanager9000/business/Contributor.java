@@ -13,7 +13,9 @@ public class Contributor implements Serializable {
 		this.mail = mail;
 	}
 	
-	
+	public Contributor() {}
+
+
 	public String getName() {
 		return name;
 	}

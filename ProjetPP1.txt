@@ -4,7 +4,7 @@
 |   - 3 activités                             |
 |   - 1 StartActivityForResult                |
 |   - 1 Liste (+Ajout +Suppression)           |
-|   - 1 BaseAdapter                          |
+|   - 1 BaseAdapter                           |
 |   - Ressources XML (Strings, colors)        |
 |   - Requête HTTP                            |
 |   - Notifications                           |
