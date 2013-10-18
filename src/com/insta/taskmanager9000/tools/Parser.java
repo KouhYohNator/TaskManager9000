@@ -12,46 +12,29 @@ import com.insta.taskmanager9000.business.Contributor;
 import com.insta.taskmanager9000.business.Task;
 
 public class Parser {
-
-	public ArrayList<Contributor> parseContributors(InputSource is){
-		
-		try{
-			SAXParserFactory parsfactory = SAXParserFactory.newInstance();
-			SAXParser parser = parsfactory.newSAXParser();
-			XMLReader reader = parser.getXMLReader();
-			
-			ParseContributorHandler contHandler = new ParseContributorHandler();
-			reader.setContentHandler(contHandler);
-			reader.parse(is);
-			
-			return contHandler.getContributors();
-			
-		}catch (Exception e){
-			e.printStackTrace();
-			System.err.println("Can't parse contributor");
-			
-			return null;
-		}
-	}
 	
-	public ArrayList<Task> parseTasks(InputSource is){
+	private ArrayList<Task> tasks;
+	private ArrayList<Contributor> contributors;
+	
+	public void parseTasks(InputSource is){
 		
 		try{
 			SAXParserFactory parsfactory = SAXParserFactory.newInstance();
 			SAXParser parser = parsfactory.newSAXParser();
 			XMLReader reader = parser.getXMLReader();
 			
-			ParseTaskHandler tskHandler = new ParseTaskHandler();
+			ParseTaskHandler tskHandler = new ParseTaskHandler(contributors);
 			reader.setContentHandler(tskHandler);
 			reader.parse(is);
 			
-			return tskHandler.getTasks();
+			this.tasks = tskHandler.getTasks();
+			this.contributors = tskHandler.getContributors();
+			
 			
 		}catch (Exception e){
 			e.printStackTrace();
 			System.err.println("Can't parse task");
 			
-			return null;
 		}
 	}
 	
