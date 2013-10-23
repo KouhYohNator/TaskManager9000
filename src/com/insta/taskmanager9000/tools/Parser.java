@@ -33,9 +33,17 @@ public class Parser {
 			
 		}catch (Exception e){
 			e.printStackTrace();
-			System.err.println("Can't parse task");
+			System.err.println("Can't parse tasks");
 			
 		}
 	}
-	
+
+	public ArrayList<Task> getTasks() {
+		return tasks;
+	}
+
+	public ArrayList<Contributor> getContributors() {
+		return contributors;
+	}
+
 }

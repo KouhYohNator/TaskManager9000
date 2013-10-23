@@ -7,43 +7,47 @@ import java.io.InputStreamReader;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.os.AsyncTask;
+import android.util.Log;
 
-public class Connector {
 
-	private static final String URL = "http://82.66.42.109:1337/android/tasks.xml";
-	private static Connector instance = null;
-	
-	private HttpClient client;
-	private HttpGet get;
+public class Connector extends AsyncTask<String, Void, HttpResponse>{
+
 	private String content;
-	
-	private Connector(){
-		this.client = new DefaultHttpClient();
-		this.get = new HttpGet(URL);
-		this.content = "";
-	}
-	
-	public boolean connect(){
-		HttpResponse response = null;
+
+	@Override
+	protected HttpResponse doInBackground(String... params) {
+		HttpGet get = new HttpGet(params[0]);
+		HttpClient client = new DefaultHttpClient();
 		try {
-			response = client.execute(this.get);
-			HttpEntity entity = response.getEntity();
-			this.content = inputStreamToString(entity.getContent());
-		} catch (ClientProtocolException e1) {
-			e1.printStackTrace();
-			return false;
+			return client.execute(get);
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			return false;
+			return null;
 		}
-		return true;
 	}
-	
+
+	@Override
+	protected void onPostExecute(HttpResponse result) {
+		if (result != null){
+			Log.d("Connector", "Post result = " + result.toString());
+			HttpEntity entity = result.getEntity();
+			try {
+				this.content = inputStreamToString(entity.getContent());
+			} 
+			catch (IllegalStateException e) { e.printStackTrace(); }
+			catch (IOException e) {	e.printStackTrace(); }
+		}
+		else{
+			Log.d("Connector", "Post result = null");
+		}
+	}
+
+
 	// repris du TP HTTPmethodsOXinit
 	public String inputStreamToString(InputStream in) throws IOException {
 		InputStreamReader streamReader = new InputStreamReader(in);
@@ -56,16 +60,6 @@ public class Connector {
 		return sb.toString();
 	}
 
-	public static Connector getInstance(){
-		if(Connector.instance == null){
-			Connector.instance = new Connector();
-			return Connector.instance;
-		}
-		else{
-			return Connector.instance;
-		}
-	}
-	
 	public String getContent(){
 		return this.content;
 	}

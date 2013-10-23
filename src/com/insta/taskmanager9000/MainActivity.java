@@ -1,10 +1,7 @@
 package com.insta.taskmanager9000;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -14,29 +11,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.insta.taskmanager9000.connection.Connector;
+
 public class MainActivity extends Activity {
 	
+	private static final String URL = "http://82.66.42.109/android/tasks.xml";
 	private EditText login, password, servAddr, servPort;
 	private Button connectButton;
 	private ProgressBar connectProgress;
-	
-	private final int STOP = 8042;
-	private final long WAITTIME = 5000;
-	
-	@SuppressLint("HandlerLeak")
-	private Handler handler = new Handler(){
-		@Override
-		public void handleMessage(Message msg){
-			if(msg.what == STOP){
-				Toast grilled = Toast.makeText(MainActivity.this, 
-											   "Connecté", Toast.LENGTH_SHORT);
-				grilled.show();
-				MainActivity.this.connectProgress.setVisibility(View.INVISIBLE);
-				MainActivity.this.connectButton.setEnabled(true);
-			}
-			super.handleMessage(msg);
-		}
-	};;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +39,7 @@ public class MainActivity extends Activity {
 				MainActivity.this.connectButton.setEnabled(false);
 				MainActivity.this.connectProgress.setVisibility(View.VISIBLE);
 				
-				String text = "Connexion à " +
+				/*String text = "Connexion à " +
 							MainActivity.this.login.getText().toString() +
 							":" +
 							MainActivity.this.password.getText().toString() +
@@ -65,13 +47,36 @@ public class MainActivity extends Activity {
 							MainActivity.this.servAddr.getText().toString() +
 							":" +
 							MainActivity.this.servPort.getText().toString();
-				Log.i("MainActivity", text);
-				MainActivity.this.handler.sendEmptyMessageDelayed(STOP, 
-																  WAITTIME);
+				Log.i("MainActivity", text);*/
+				Log.i("MainActivity", URL);
+				
+				MainActivity.this.connection();
+				
 			}
 		});
 	}
 
+	public void connection(){
+		Toast grilled = null;
+		Log.i("MainActivity", "Connexion - début");
+		Connector connector = (Connector) new Connector();
+		Log.i("MainActivity", "Connexion - fin");
+		if(connector.execute(URL) != null){
+			Log.i("MainActivity", "Connexion - résultat : " + connector.getContent());
+			grilled = Toast.makeText(this,
+								     connector.getContent(),
+								     Toast.LENGTH_LONG);
+		}
+		else{
+			grilled = Toast.makeText(this,
+					  "Echec de la connexion",
+				      Toast.LENGTH_LONG);
+		}
+		this.connectProgress.setVisibility(View.INVISIBLE);
+		this.connectButton.setEnabled(true);
+		grilled.show();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

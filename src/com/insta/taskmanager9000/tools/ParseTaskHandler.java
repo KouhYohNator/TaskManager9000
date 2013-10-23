@@ -17,7 +17,8 @@ public class ParseTaskHandler extends DefaultHandler {
 	private Contributor parsedContributor;
 	private ArrayList<Task> tasks;
 	private ArrayList<Contributor> contributors;
-	private boolean inTask, inAuthor, inTodo, inTarget;
+	@SuppressWarnings("unused")
+	private boolean inTask, inContributor;
 	private StringBuffer buffer;
 	
 	
@@ -47,10 +48,6 @@ public class ParseTaskHandler extends DefaultHandler {
 		if (localName.equalsIgnoreCase("TASKS")) {
 			this.tasks = new ArrayList<Task>();
 		}
-		// On entre dans la liste des contributeurs
-		else if (localName.equalsIgnoreCase("CONTRIBUTORS")) {
-			this.contributors = new ArrayList<Contributor>();
-		}
 		// Parsing d'une tâche
 		else if (localName.equalsIgnoreCase("TASK")) {
 
@@ -75,8 +72,6 @@ public class ParseTaskHandler extends DefaultHandler {
 		// Parsing de l'auteur d'une tâche
 		else if(localName.equalsIgnoreCase("AUTHOR")){
 			
-			this.parsedContributor = new Contributor();
-			
 			for (int i = 0; i < atts.getLength(); i++) {
 				String name = atts.getLocalName(i);
 				String value = atts.getValue(i);
@@ -93,8 +88,47 @@ public class ParseTaskHandler extends DefaultHandler {
 		// Parsing de la description de la tâche
 		else if(localName.equalsIgnoreCase("TODO")){
 			this.buffer = new StringBuffer();
+			this.parsedTask.setTodo(this.buffer.toString());
 			// pour la lecture, Cf. characters()
 		}
+		// Parsing du contributeur à la tâche
+		else if (localName.equalsIgnoreCase("TARGET")){
+			
+			for (int i = 0; i < atts.getLength(); i++) {
+				String name = atts.getLocalName(i);
+				String value = atts.getValue(i);
+				
+				if (name.equalsIgnoreCase("name")) {
+					for(Contributor c : this.contributors){
+						if(value.equals(c.getName())){
+							this.parsedTask.setTarget(c);
+						}
+					}
+				}
+			}
+		}
+		// On entre dans la liste des contributeurs
+		else if (localName.equalsIgnoreCase("CONTRIBUTORS")) {
+			this.contributors = new ArrayList<Contributor>();
+		}
+		// Parsing d'un contributeur
+		else if (localName.equalsIgnoreCase("CONTRIBUTORS")) {
+			
+			for (int i = 0; i < atts.getLength(); i++) {
+				String name = atts.getLocalName(i);
+				String value = atts.getValue(i);
+				
+				if (name.equalsIgnoreCase("name")) {
+					this.parsedContributor.setName(value);
+				} else if (name.equalsIgnoreCase("mail")) {
+					this.parsedContributor.setMail(value);
+				}
+				
+			}
+			
+			this.inContributor = true;
+		}
+		
 	}
 	
 	@Override
@@ -115,8 +149,15 @@ public class ParseTaskHandler extends DefaultHandler {
 			this.inTask = false;
 		}
 		else if(localName.equalsIgnoreCase("TODO")){
-			this.parsedTask.setTodo(this.buffer.toString());
 			this.buffer = null;
+		}
+		else if(localName.equalsIgnoreCase("CONTRIBUTOR")){
+			Log.i("ParseContributor", "Parsed : " + 
+					this.parsedContributor.toString());
+			
+			this.contributors.add(this.parsedContributor);
+			this.parsedContributor = null;
+			this.inContributor = false;
 		}
 	}
 
