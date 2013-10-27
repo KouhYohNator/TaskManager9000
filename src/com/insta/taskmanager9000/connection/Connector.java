@@ -9,44 +9,42 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
 
-public class Connector extends AsyncTask<String, Void, HttpResponse>{
-
-	private String content;
+public class Connector extends AsyncTask<String, Void, String>{
 
 	@Override
-	protected HttpResponse doInBackground(String... params) {
+	protected String doInBackground(String... params) {
 		HttpGet get = new HttpGet(params[0]);
-		HttpClient client = new DefaultHttpClient();
+		HttpClient client = AndroidHttpClient.newInstance("Android");
 		try {
-			return client.execute(get);
+			HttpResponse result = client.execute(get);
+			String content = "";
+			if (result != null){
+				Log.d("Connector", "Post result = " + result.toString());
+				HttpEntity entity = result.getEntity();
+				try {
+					Log.d("Connector", "Entity = " + result.getEntity().toString());
+					content = inputStreamToString(entity.getContent());
+					Log.d("Connector", "Content = " + content);
+				} 
+				catch (IllegalStateException e) { e.printStackTrace(); }
+				catch (IOException e) {	e.printStackTrace(); }
+			}
+			else{
+				Log.d("Connector", "Post result = null");
+				content = "Echec de la connexion";
+			}
+			return content;
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			return null;
 		}
 	}
-
-	@Override
-	protected void onPostExecute(HttpResponse result) {
-		if (result != null){
-			Log.d("Connector", "Post result = " + result.toString());
-			HttpEntity entity = result.getEntity();
-			try {
-				this.content = inputStreamToString(entity.getContent());
-			} 
-			catch (IllegalStateException e) { e.printStackTrace(); }
-			catch (IOException e) {	e.printStackTrace(); }
-		}
-		else{
-			Log.d("Connector", "Post result = null");
-		}
-	}
-
 
 	// repris du TP HTTPmethodsOXinit
 	public String inputStreamToString(InputStream in) throws IOException {
@@ -58,10 +56,6 @@ public class Connector extends AsyncTask<String, Void, HttpResponse>{
 			sb.append(line);
 		}
 		return sb.toString();
-	}
-
-	public String getContent(){
-		return this.content;
 	}
 
 }

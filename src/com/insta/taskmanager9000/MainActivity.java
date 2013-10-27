@@ -1,5 +1,7 @@
 package com.insta.taskmanager9000;
 
+import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +17,8 @@ import com.insta.taskmanager9000.connection.Connector;
 
 public class MainActivity extends Activity {
 	
-	private static final String URL = "http://82.66.42.109/android/tasks.xml";
+	private static final String URL = "http://192.168.16.2/android/tasks.xml";
+	@SuppressWarnings("unused")
 	private EditText login, password, servAddr, servPort;
 	private Button connectButton;
 	private ProgressBar connectProgress;
@@ -57,24 +60,16 @@ public class MainActivity extends Activity {
 	}
 
 	public void connection(){
-		Toast grilled = null;
 		Log.i("MainActivity", "Connexion - début");
 		Connector connector = (Connector) new Connector();
+		try {
+			String mess = connector.execute(URL).get();
+			Toast.makeText(this, mess, Toast.LENGTH_LONG).show();
+		} catch (InterruptedException e) { e.printStackTrace();
+		} catch (ExecutionException e) { e.printStackTrace(); }
 		Log.i("MainActivity", "Connexion - fin");
-		if(connector.execute(URL) != null){
-			Log.i("MainActivity", "Connexion - résultat : " + connector.getContent());
-			grilled = Toast.makeText(this,
-								     connector.getContent(),
-								     Toast.LENGTH_LONG);
-		}
-		else{
-			grilled = Toast.makeText(this,
-					  "Echec de la connexion",
-				      Toast.LENGTH_LONG);
-		}
-		this.connectProgress.setVisibility(View.INVISIBLE);
-		this.connectButton.setEnabled(true);
-		grilled.show();
+		connectProgress.setVisibility(View.INVISIBLE);
+		connectButton.setEnabled(true);
 	}
 	
 	@Override
