@@ -18,14 +18,9 @@ public class ParseTaskHandler extends DefaultHandler {
 	private ArrayList<Task> tasks;
 	private ArrayList<Contributor> contributors;
 	@SuppressWarnings("unused")
-	private boolean inTask, inContributor;
+	private boolean inTask, inContributor, inTodo = false;
 	private StringBuffer buffer;
 	
-	
-	public ParseTaskHandler(ArrayList<Contributor> contributors){
-		super();
-		this.contributors = contributors;
-	}
 	
 	public ArrayList<Task> getTasks() {
 		return this.tasks;
@@ -47,6 +42,7 @@ public class ParseTaskHandler extends DefaultHandler {
 		// On entre dans la liste des tâches
 		if (localName.equalsIgnoreCase("TASKS")) {
 			this.tasks = new ArrayList<Task>();
+			Log.d("ParseTaskHandler", "Tasks - entrée");
 		}
 		// Parsing d'une tâche
 		else if (localName.equalsIgnoreCase("TASK")) {
@@ -87,9 +83,9 @@ public class ParseTaskHandler extends DefaultHandler {
 		}
 		// Parsing de la description de la tâche
 		else if(localName.equalsIgnoreCase("TODO")){
-			this.buffer = new StringBuffer();
-			this.parsedTask.setTodo(this.buffer.toString());
 			// pour la lecture, Cf. characters()
+			this.buffer = new StringBuffer();
+			this.inTodo = true;
 		}
 		// Parsing du contributeur à la tâche
 		else if (localName.equalsIgnoreCase("TARGET")){
@@ -110,9 +106,12 @@ public class ParseTaskHandler extends DefaultHandler {
 		// On entre dans la liste des contributeurs
 		else if (localName.equalsIgnoreCase("CONTRIBUTORS")) {
 			this.contributors = new ArrayList<Contributor>();
+			Log.d("ParseTaskHandler", "Contributors - entrée");
 		}
 		// Parsing d'un contributeur
-		else if (localName.equalsIgnoreCase("CONTRIBUTORS")) {
+		else if (localName.equalsIgnoreCase("CONTRIBUTOR")) {
+			
+			this.parsedContributor = new Contributor();
 			
 			for (int i = 0; i < atts.getLength(); i++) {
 				String name = atts.getLocalName(i);
@@ -141,7 +140,7 @@ public class ParseTaskHandler extends DefaultHandler {
 	public void endElement(String namespaceURI, String localName, String qName)
 			throws SAXException {
 		if (localName.equalsIgnoreCase("TASK")) {
-			Log.i("ParseContributor", "Parsed : " + 
+			Log.d("ParseTaskHandler", "Parsed task : " + 
 					this.parsedTask.toString());
 			
 			this.tasks.add(this.parsedTask);
@@ -149,10 +148,19 @@ public class ParseTaskHandler extends DefaultHandler {
 			this.inTask = false;
 		}
 		else if(localName.equalsIgnoreCase("TODO")){
+			this.parsedTask.setTodo(this.buffer.toString());
+			Log.d("PaseTaskHandler", "buffer : " + this.buffer.toString());
 			this.buffer = null;
+			this.inTodo = false;
+		}
+		else if (localName.equalsIgnoreCase("TASKS")) {
+			Log.d("ParseTaskHandler", "Tasks - sortie");
+		}
+		else if (localName.equalsIgnoreCase("CONTRIBUTORS")) {
+			Log.d("ParseTaskHandler", "Contributors - sortie");
 		}
 		else if(localName.equalsIgnoreCase("CONTRIBUTOR")){
-			Log.i("ParseContributor", "Parsed : " + 
+			Log.d("ParseTaskHandler", "Parsed contributor : " + 
 					this.parsedContributor.toString());
 			
 			this.contributors.add(this.parsedContributor);

@@ -1,8 +1,10 @@
 package com.insta.taskmanager9000;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,11 +15,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.insta.taskmanager9000.business.Contributor;
+import com.insta.taskmanager9000.business.Task;
 import com.insta.taskmanager9000.connection.Connector;
+import com.insta.taskmanager9000.tools.Pair;
 
 public class MainActivity extends Activity {
 	
-	private static final String URL = "http://192.168.16.2/android/tasks.xml";
+	private static final String DEFAULT_URL = "http://192.168.0.2/android/tasks.xml";
+	private static final int LIST_ID = 8001;
 	@SuppressWarnings("unused")
 	private EditText login, password, servAddr, servPort;
 	private Button connectButton;
@@ -42,16 +48,7 @@ public class MainActivity extends Activity {
 				MainActivity.this.connectButton.setEnabled(false);
 				MainActivity.this.connectProgress.setVisibility(View.VISIBLE);
 				
-				/*String text = "Connexion à " +
-							MainActivity.this.login.getText().toString() +
-							":" +
-							MainActivity.this.password.getText().toString() +
-							"@" +
-							MainActivity.this.servAddr.getText().toString() +
-							":" +
-							MainActivity.this.servPort.getText().toString();
-				Log.i("MainActivity", text);*/
-				Log.i("MainActivity", URL);
+				Log.i("MainActivity", DEFAULT_URL);
 				
 				MainActivity.this.connection();
 				
@@ -62,14 +59,37 @@ public class MainActivity extends Activity {
 	public void connection(){
 		Log.i("MainActivity", "Connexion - début");
 		Connector connector = (Connector) new Connector();
+		Pair<ArrayList<Contributor>, ArrayList<Task>> parsedLists = null;
+		
+		// Connexion et récupération des données
 		try {
-			String mess = connector.execute(URL).get();
-			Toast.makeText(this, mess, Toast.LENGTH_LONG).show();
+			parsedLists = connector.execute(DEFAULT_URL).get();
 		} catch (InterruptedException e) { e.printStackTrace();
 		} catch (ExecutionException e) { e.printStackTrace(); }
+		
 		Log.i("MainActivity", "Connexion - fin");
 		connectProgress.setVisibility(View.INVISIBLE);
 		connectButton.setEnabled(true);
+		
+		if(parsedLists != null){
+			
+			Intent intent = new Intent(this, ListActivity.class);
+			Bundle humble = new Bundle();
+			humble.putSerializable("datas", parsedLists);
+			intent.putExtras(humble);
+			
+			startActivityForResult(intent, LIST_ID);
+		}
+		else {
+			Toast grilled = Toast.makeText(this, "Echec de connexion", Toast.LENGTH_SHORT);
+			grilled.show();
+		}
+	}
+	
+	//TODO
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
 	}
 	
 	@Override

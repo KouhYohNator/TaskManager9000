@@ -1,8 +1,11 @@
 package com.insta.taskmanager9000.business;
 
+import java.io.Serializable;
 
-public class Task {
 
+public class Task implements Serializable{
+
+	private static final long serialVersionUID = 934044021934002581L;
 	private Contributor author;
 	private String date;
 	private Contributor target;
@@ -28,19 +31,33 @@ public class Task {
 	}
 	
 	public Task() {}
-	
 
+	
+	public String toString(){
+		StringBuilder result = new StringBuilder();
+		result.append(this.date + " - " + this.author.toString() + "\n");
+		result.append(this.state.name() + " / " + this.priority.name() + "\n");
+		
+		if(this.target != null){
+			result.append("->" + this.target.toString() + "\n");
+		}
+		
+		result.append(this.todo);
+		return result.toString();
+	}
 
 	public Contributor getAuthor() {
 		return author;
 	}
 	public void setAuthor(Contributor author) {
+		assert(author != null);
 		this.author = author;
 	}
 	public String getDate() {
 		return date;
 	}
 	public void setDate(String value) {
+		assert(value != null && !value.isEmpty());
 		this.date = value;
 	}
 	public Contributor getTarget() {
@@ -53,18 +70,21 @@ public class Task {
 		return state;
 	}
 	public void setState(String value) {
+		assert(value != null && !value.isEmpty());
 		this.state = State.valueOf(value);
 	}
 	public Priority getPriority() {
 		return priority;
 	}
 	public void setPriority(String value) {
+		assert(value != null && !value.isEmpty());
 		this.priority = Priority.valueOf(value);
 	}
 	public String getTodo() {
 		return todo;
 	}
 	public void setTodo(String todo) {
+		assert(todo != null && !todo.isEmpty());
 		this.todo = todo;
 	}
 	

@@ -14,5 +14,7 @@
     <string name="divider_description">divider</string>
     <string name="txt_servAddr">Adresse</string>
     <string name="txt_sertPort">Port</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="txt_list_tasks">Liste des tâches</string>
 
 </resources>

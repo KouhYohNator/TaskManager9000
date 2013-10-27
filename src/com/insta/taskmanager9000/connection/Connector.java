@@ -4,42 +4,54 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.xml.sax.InputSource;
+
+import com.insta.taskmanager9000.business.Contributor;
+import com.insta.taskmanager9000.business.Task;
+import com.insta.taskmanager9000.tools.Pair;
+import com.insta.taskmanager9000.tools.Parser;
 
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
 
-public class Connector extends AsyncTask<String, Void, String>{
+public class Connector extends AsyncTask< String, Void, Pair<ArrayList<Contributor>, ArrayList<Task>> >{
 
 	@Override
-	protected String doInBackground(String... params) {
+	protected Pair<ArrayList<Contributor>, ArrayList<Task>> doInBackground(String... params) {
 		HttpGet get = new HttpGet(params[0]);
 		HttpClient client = AndroidHttpClient.newInstance("Android");
+		
 		try {
+			// Connexion
 			HttpResponse result = client.execute(get);
-			String content = "";
-			if (result != null){
-				Log.d("Connector", "Post result = " + result.toString());
+			if (result != null){ // Réponse du serveur
+				String content = "";
 				HttpEntity entity = result.getEntity();
+				
 				try {
-					Log.d("Connector", "Entity = " + result.getEntity().toString());
+					// Récupération et parsing du contenu
 					content = inputStreamToString(entity.getContent());
-					Log.d("Connector", "Content = " + content);
+					Log.d("Connector", "content : " + content);
+					Parser myParser = new Parser();
+					return myParser.parseTasks(new InputSource(
+												new StringReader(content)));
 				} 
 				catch (IllegalStateException e) { e.printStackTrace(); }
 				catch (IOException e) {	e.printStackTrace(); }
 			}
 			else{
 				Log.d("Connector", "Post result = null");
-				content = "Echec de la connexion";
 			}
-			return content;
+			return null;
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			return null;
