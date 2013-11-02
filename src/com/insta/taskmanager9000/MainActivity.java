@@ -22,8 +22,10 @@ import com.insta.taskmanager9000.tools.Pair;
 
 public class MainActivity extends Activity {
 	
-	private static final String DEFAULT_URL = "http://192.168.16.2/android/tasks.xml";
-	private static final int LIST_ID = 8001;
+	public static final String DEFAULT_URL = "http://192.168.0.2/android/tasks.xml";
+	public static final String DEFAULT_USER = "Nicolas";
+	public static final String DEFAULT_MAIL = "nicolas.lebrument@etu.upmc.fr";
+	
 	@SuppressWarnings("unused")
 	private EditText login, password, servAddr, servPort;
 	private Button connectButton;
@@ -78,7 +80,7 @@ public class MainActivity extends Activity {
 			humble.putSerializable("datas", parsedLists);
 			intent.putExtras(humble);
 			
-			startActivityForResult(intent, LIST_ID);
+			startActivity(intent);
 		}
 		else {
 			Toast grilled = Toast.makeText(this, "Echec de connexion", Toast.LENGTH_SHORT);

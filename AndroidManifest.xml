@@ -36,6 +36,11 @@
             android:label="@string/title_activity_list"
             android:theme="@android:style/Theme.Holo.NoActionBar" >
         </activity>
+        <activity
+            android:name="com.insta.taskmanager9000.AddActivity"
+            android:label="@string/title_activity_add"
+            android:theme="@android:style/Theme.Holo.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

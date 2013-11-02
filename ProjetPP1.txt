@@ -3,7 +3,7 @@
 +---------------------------------------------+
 |   - 3 activités                         OK  |
 |   - 1 StartActivityForResult            OK  |
-|   - 1 Liste (+Ajout +Suppression)           |
+|   - 1 Liste (+Ajout +Suppression)       OK  |
 |   - 1 BaseAdapter                       OK  |
 |   - Ressources XML (Strings, colors)    OK  |
 |   - Requête HTTP                        OK  |

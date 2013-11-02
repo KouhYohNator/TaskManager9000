@@ -16,5 +16,21 @@
     <string name="txt_sertPort">Port</string>
     <string name="title_activity_list">ListActivity</string>
     <string name="txt_list_tasks">Liste des tâches</string>
+    <string name="dial_suppr">Supprimer cette tâche ?</string>
+    <string name="dial_btn_yes">Oui</string>
+    <string name="dial_btn_no">Non</string>
+    <string name="list_menu_add">Ajouter</string>
+    <string name="title_activity_add">AddActivity</string>
+    <string name="txt_add_task">Ajouter une tâche</string>
+    <string name="txt_todo">Faire</string>
+    <string name="txt_priority">Priorité</string>
+    <string name="txt_state">Etat</string>
+    <string name="txt_priority_high">Haute</string>
+    <string name="txt_priority_critical">Critique</string>
+    <string name="txt_priority_medium">Normale</string>
+    <string name="txt_priority_low">Faible</string>
+    <string name="txt_state_todo">A faire</string>
+    <string name="txt_state_deferred">Reportée</string>
+    <string name="btn_add">Ajouter</string>
 
 </resources>
