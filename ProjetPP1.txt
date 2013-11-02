@@ -1,12 +1,12 @@
 #=============================================#
 |                    REQUIS                   |
 +---------------------------------------------+
-|   - 3 activités                             |
-|   - 1 StartActivityForResult                |
+|   - 3 activités                         OK  |
+|   - 1 StartActivityForResult            OK  |
 |   - 1 Liste (+Ajout +Suppression)           |
-|   - 1 BaseAdapter                           |
-|   - Ressources XML (Strings, colors)        |
-|   - Requête HTTP                            |
+|   - 1 BaseAdapter                       OK  |
+|   - Ressources XML (Strings, colors)    OK  |
+|   - Requête HTTP                        OK  |
 |   - Notifications                           |
 |                                             |
 #=============================================#

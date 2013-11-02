@@ -22,7 +22,7 @@ import com.insta.taskmanager9000.tools.Pair;
 
 public class MainActivity extends Activity {
 	
-	private static final String DEFAULT_URL = "http://192.168.0.2/android/tasks.xml";
+	private static final String DEFAULT_URL = "http://192.168.16.2/android/tasks.xml";
 	private static final int LIST_ID = 8001;
 	@SuppressWarnings("unused")
 	private EditText login, password, servAddr, servPort;

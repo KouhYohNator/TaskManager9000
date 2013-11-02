@@ -1,8 +1,10 @@
 package com.insta.taskmanager9000.business;
 
+import android.annotation.SuppressLint;
 import java.io.Serializable;
 
 
+@SuppressLint("DefaultLocale")
 public class Task implements Serializable{
 
 	private static final long serialVersionUID = 934044021934002581L;
@@ -71,14 +73,14 @@ public class Task implements Serializable{
 	}
 	public void setState(String value) {
 		assert(value != null && !value.isEmpty());
-		this.state = State.valueOf(value);
+		this.state = State.valueOf(value.toUpperCase());
 	}
 	public Priority getPriority() {
 		return priority;
 	}
 	public void setPriority(String value) {
 		assert(value != null && !value.isEmpty());
-		this.priority = Priority.valueOf(value);
+		this.priority = Priority.valueOf(value.toUpperCase());
 	}
 	public String getTodo() {
 		return todo;
