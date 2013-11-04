@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
 	private EditText login, password, servAddr, servPort;
 	private Button connectButton;
 	private ProgressBar connectProgress;
+	private String url;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,17 @@ public class MainActivity extends Activity {
 				MainActivity.this.connectButton.setEnabled(false);
 				MainActivity.this.connectProgress.setVisibility(View.VISIBLE);
 				
-				Log.i("MainActivity", DEFAULT_URL);
+				String addr = servAddr.getText().toString();
+				String port = servPort.getText().toString();
+				
+				if(addr.isEmpty() || port.isEmpty()){
+					url = DEFAULT_URL;
+				}
+				else{
+					url = "http://" + addr + ":" + port + "/android/tasks.xml";
+				}
+				
+				Log.i("MainActivity", url);
 				
 				MainActivity.this.connection();
 				
@@ -65,7 +76,7 @@ public class MainActivity extends Activity {
 		
 		// Connexion et récupération des données
 		try {
-			parsedLists = connector.execute(DEFAULT_URL).get();
+			parsedLists = connector.execute(this.url).get();
 		} catch (InterruptedException e) { e.printStackTrace();
 		} catch (ExecutionException e) { e.printStackTrace(); }
 		
@@ -86,12 +97,6 @@ public class MainActivity extends Activity {
 			Toast grilled = Toast.makeText(this, "Echec de connexion", Toast.LENGTH_SHORT);
 			grilled.show();
 		}
-	}
-	
-	//TODO
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
 	}
 	
 	@Override
