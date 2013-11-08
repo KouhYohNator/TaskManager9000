@@ -22,7 +22,9 @@ import com.insta.taskmanager9000.tools.Pair;
 
 public class MainActivity extends Activity {
 	
-	public static final String DEFAULT_URL = "http://192.168.0.2/android/tasks.xml";
+	public static final String DEFAULT_ADDRESS = "192.168.0.2";
+	public static final String DEFAULT_PORT = "80";
+	public static final String DEFAULT_PATH = "/taskmanager/tasks.xml";
 	public static final String DEFAULT_USER = "Nicolas";
 	public static final String DEFAULT_MAIL = "nicolas.lebrument@etu.upmc.fr";
 	
@@ -49,27 +51,26 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				MainActivity.this.connectButton.setEnabled(false);
-				MainActivity.this.connectProgress.setVisibility(View.VISIBLE);
 				
 				String addr = servAddr.getText().toString();
 				String port = servPort.getText().toString();
 				
-				if(addr.isEmpty() || port.isEmpty()){
-					url = DEFAULT_URL;
-				}
-				else{
-					url = "http://" + addr + ":" + port + "/android/tasks.xml";
-				}
+				if(addr.isEmpty())
+					addr = DEFAULT_ADDRESS;
+				if(port.isEmpty())
+					port = DEFAULT_PORT;
+				else if(Integer.valueOf(port) > 65535)
+					port = "65535";
 				
+				url = "http://" + addr + ":" + port + DEFAULT_PATH;
 				Log.i("MainActivity", url);
-				
 				MainActivity.this.connection();
-				
 			}
 		});
 	}
 
 	public void connection(){
+		MainActivity.this.connectProgress.setVisibility(View.VISIBLE);
 		Log.i("MainActivity", "Connexion - début");
 		Connector connector = (Connector) new Connector();
 		Pair<ArrayList<Contributor>, ArrayList<Task>> parsedLists = null;
